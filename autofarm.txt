@@ -1,0 +1,24 @@
+repeat wait() until game.Players.LocalPlayer.Character -- Ensures that the script doesn't execute too early
+
+game:GetService("ReplicatedStorage").Events.BuildingEvent:FireServer(table.unpack({ -- Places a node (needed for building props)
+	[1] = 1,
+	[2] = "Node",
+	[3] = CFrame.new() + Vector3.new(10,1510,0),
+}))
+
+game:GetService("ReplicatedStorage").Events.BuildingEvent:FireServer(table.unpack({ -- Purchases and places a "Killzone Board" (prop worth exactly 1k)
+	[1] = 1,    
+	[2] = "Killzone Board",    
+	[3] = CFrame.new() + Vector3.new(0,1500,10),
+}))
+
+repeat
+	task.wait()
+until game.Players.LocalPlayer.PlayerData.Value == 2 -- Waits until the player loads their data
+
+game:GetService("ReplicatedStorage").Events.BuildingEvent:FireServer(table.unpack({ -- Sells the "Killzone Board"
+	[1] = 2,    
+	[2] = workspace.Buildings[game.Players.LocalPlayer.Name]["Killzone Board"],
+}))
+
+game:GetService("TeleportService"):Teleport(game.PlaceId, game:GetService("Players").LocalPlayer) -- Makes the player rejoin
